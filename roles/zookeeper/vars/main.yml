@@ -1,0 +1,4 @@
+---
+# file: vars/main.yml
+zk_version: "3.4.6"
+zk_checksum: "01b3938547cd620dc4c93efe07c0360411f4a66962a70500b163b59014046994"

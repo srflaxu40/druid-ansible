@@ -1,0 +1,13 @@
+---
+# file: main.yml
+# Configure will configure PostgreSQL DB
+- include: configure.yml
+  tags: configure
+
+# The reason for separating this is
+# deploy runs schema changes for Druid against
+# the database while configure sets up the database
+# This allows us to run deploy by itself in the case
+# we use RDS or a third party PostgreSQL db.
+- include: deploy.yml
+  tags: deploy

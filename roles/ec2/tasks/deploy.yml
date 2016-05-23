@@ -1,0 +1,38 @@
+---
+# spin up druid nodes
+- name: Spin up a new node for Druid provisioning
+  ec2:
+    key_name: "{{ key_name }}"
+    group_id: "{{ security_group }}"
+    instance_type: "{{ type }}"
+    image: "{{ ami_id }}"
+    wait: yes
+    wait_timeout: 500
+    volumes:
+      - device_name: /dev/sdf
+        device_type: gp2
+        volume_size: "{{ storage }}"
+        delete_on_termination: true
+    monitoring: yes
+    region: "{{ region }}"
+    vpc_subnet_id: "{{ subnet_id }}"
+    instance_profile_name: "{{ iam_role }}"
+    exact_count: "{{ count }}"
+    count_tag: 
+        Name: "{{ tag_name }}"
+    instance_tags:
+        Name: "{{ tag_name }}-{{ tag_environment }}"
+    assign_public_ip: yes
+    termination_protection: yes
+    user_data: |
+        #!/bin/bash
+        export host_name_full=`curl http://169.254.169.254/latest/meta-data/hostname`
+        export host_name=`echo ${host_name_full} | sed 's/.your-domain.co//'`
+        echo "${host_name}" > /etc/hostname
+        echo "127.0.0.1 localhost ${host_name}" > /etc/hosts
+        export IP_ADDRESS=`echo ${host_name} | sed 's/ip-//' | sed 's/-/./g'`
+
+        find /opt/druid -type f -exec sed -i -e "s/druid.host=.*/druid.host=${IP_ADDRESS}/g" {} \;
+
+        initctl restart druid_{{ role }}
+

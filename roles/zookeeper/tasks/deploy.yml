@@ -1,0 +1,9 @@
+---
+# file: deploy.yml
+- name: Start zk server
+  shell: ./bin/zkServer.sh start
+  args:
+    chdir: /opt/zookeeper/zookeeper-{{ zk_version }}/
+    executable: /bin/bash
+  become: true
+

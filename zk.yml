@@ -1,0 +1,8 @@
+---
+# file: tranq.yml
+- name: Configure and deploy zookeeper server
+  hosts: tag_Name_{{ tag_name }}_{{ tag_environment }}
+  roles:
+    - java
+    - zookeeper
+    - hosts

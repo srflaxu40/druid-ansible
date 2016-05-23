@@ -1,0 +1,63 @@
+{
+  "dataSources" : {
+    "ip_queries" : {
+      "spec" : {
+        "dataSchema" : {
+          "dataSource" : "ip_queries",
+          "granularitySpec" : {
+            "type" : "uniform",
+            "segmentGranularity" : "hour",
+            "queryGranularity" : "none"
+          },
+          "parser" : {
+            "type" : "string",
+            "parseSpec" : {
+              "format" : "json",
+              "dimensionsSpec" : {
+                "dimensions" : [
+                  "key",
+                  "page",
+                  "page_hash",
+                  "page_title",
+                  "your-domain_sid",
+                  "persona_id",
+                  "extended_co"
+                ]
+              },
+              "timestampSpec" : {
+                "format" : "auto",
+                "column" : "time"
+              }
+            }
+          },
+          "metricsSpec" : [
+            {
+              "name" : "count",
+              "type" : "count"
+            }
+          ]
+        },
+        "ioConfig" : {
+          "type" : "realtime"
+        },
+        "tuningConfig" : {
+          "type" : "realtime",
+          "maxRowsInMemory" : "100000",
+          "intermediatePersistPeriod" : "PT10M",
+          "windowPeriod" : "PT10M"
+        }
+      },
+      "properties" : {
+        "task.partitions" : "1",
+        "task.replicants" : "1"
+      }
+    }
+  },
+  "properties" : {
+    "zookeeper.connect" : "{{ zk_host }}",
+    "druid.discovery.curator.path" : "/druid/discovery",
+    "druid.selectors.indexing.serviceName" : "druid/overlord",
+    "http.port" : "8200",
+    "http.threads" : "8"
+  }
+}

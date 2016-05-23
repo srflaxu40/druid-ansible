@@ -1,0 +1,13 @@
+---
+# file: configure.yml
+- name: copy over host shell script
+  template: src=change_hostname.sh dest=/tmp/change_hostname.sh mode=0777
+            owner={{ ansible_user }}
+  become: yes 
+ 
+- name: update host name
+  shell: /tmp/change_hostname.sh
+  args:
+    executable: /bin/bash
+  become: yes 
+

@@ -1,0 +1,18 @@
+---
+# file: deploy.yml
+- name: Copy over unit file for druid role {{ druid_role }}
+  template: src=druid.conf dest=/etc/init/druid_{{ druid_role }}.conf
+        owner={{ ansible_user }} mode=0644
+  become: true
+
+- name: Start druid {{ druid_role }} service
+  service: name=druid_{{ druid_role }} state=restarted
+  become: true
+
+#- name: Start Druid role {{ druid_role }}
+#  shell: screen -dmS druid-{{ druid_role }} java `cat conf/druid/{{ druid_role }}/jvm.config | xargs` -cp conf/druid/_common:conf/druid/historical:lib/* io.druid.cli.Main server {{ druid_role }}
+#  args:
+#    chdir: /opt/druid/druid-{{ druid_version }}/
+#    executable: /bin/bash
+#  become: true
+

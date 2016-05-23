@@ -1,0 +1,17 @@
+---
+# file: configure.yml
+- name: Update Apt list with new Java repo {{ java_repo }}
+  apt_repository: repo={{ java_repo }}
+                  update_cache=yes
+  become: true
+
+- name: Auto-accept license prompt
+  shell: echo "{{ java_version }} shared/accepted-oracle-license-v1-1 select true" | sudo /usr/bin/debconf-set-selections
+  args:
+    executable: /bin/bash
+  become: true
+
+- name: Install Java Version {{ java_version }}
+  apt: name={{ java_version }}
+  become: true
+

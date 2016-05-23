@@ -1,0 +1,11 @@
+---
+# file: druid.yml
+# note: this is not used by packer.  those plays are in the
+# packer dir.
+- name: Configure and deploy druid node
+  hosts: tag_Name_{{ tag_name }}_{{ tag_environment }}
+  become: yes
+  roles:
+    - hosts
+    - java
+    - druid

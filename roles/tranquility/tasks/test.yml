@@ -1,0 +1,6 @@
+---
+# file: test.yml
+- name: Test that our port is allocated
+  wait_for: host={{ ansible_eth0["ipv4"]["address"] }} port=8200
+            connect_timeout=10 state=started
+

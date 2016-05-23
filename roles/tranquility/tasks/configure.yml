@@ -1,0 +1,28 @@
+---
+# file: configure.yml
+- name: Create directory for tranquility
+  file: path=/opt/druid-tranquility/ state=directory mode=0777
+        owner={{ ansible_user }}
+  become: yes
+
+- name: Grab tranquility off the webz
+  get_url: url=http://static.druid.io/tranquility/releases/tranquility-distribution-{{ tranq_version }}.tgz
+           dest=/opt/druid-tranquility
+           checksum=sha256:{{ tranq_checksum }}
+           mode=0777
+  become: yes
+
+- name: Un-tar tranquility download
+  unarchive: src=/opt/druid-tranquility/tranquility-distribution-{{ tranq_version }}.tgz dest=/opt/druid-tranquility/ copy=no
+  become: yes
+
+- name: Change ownership of download path
+  file: path=/opt/druid-tranquility owner={{ ansible_user }} recurse=yes mode=0777
+  become: yes 
+
+# Tranquility configuration
+- name: Copy common.properties for tranquility node
+  template: src=tranquility/server.json dest=/opt/druid-tranquility/tranquility-distribution-{{ tranq_version }}/conf/
+        owner={{ ansible_user }} mode=0755
+  become: yes
+

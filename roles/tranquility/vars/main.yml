@@ -1,0 +1,5 @@
+---
+# file: vars/main.yml
+tranq_version: "0.7.4"
+tranq_checksum: "85ebeb9486597a6d0bc2e6ea42345f9d9de47e3f4e18c0b7086d5bdef78c84bf"
+zk_host: "druid-zookeeper.your-domain.co"

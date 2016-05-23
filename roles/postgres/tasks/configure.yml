@@ -1,0 +1,77 @@
+---
+# file: configure.yml
+# Expects to use Ubuntu OS
+- name: Get ubuntu version
+  command: lsb_release -cs
+  register: ubuntu_version
+  become: true
+
+- name: Add PostgreSQL apt-key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+  become: true
+
+- name: Ensure PostgreSQL repo not already added to sources
+  shell: grep -Ri postgresql /etc/apt/sources.list.d
+  args:
+    executable: bash
+  register: apt_check
+  ignore_errors: true
+
+- name: Has PostgreSQL repo already been added to apt sources?
+  debug: msg={{ apt_check }}
+
+- name: Show lsb_release results
+  debug: msg={{ ubuntu_version }}
+
+- debug: msg={{ ubuntu_version.stdout }}
+
+- name: Add PostgreSQL APT repostitory to APT sources
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ {{ ubuntu_version.stdout }}-pgdg main' state=present
+  become: true
+  when: apt_check|failed
+
+- name: Install PostgreSQL postgres-{{ postgres_version }}
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+     - postgresql-{{ postgres_version }} 
+     - postgresql-contrib
+  become: true
+
+# We install these libs here for use on
+# fresh instances w PG already installed.
+- name: Copy over postgres configuration
+  template: src=pg_hba.conf dest=/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
+        mode=0640 owner=postgres
+  become: true
+
+- name: Copy over postgres configuration
+  copy: src=postgresql.conf dest=/etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+        mode=0640 owner=postgres
+  become: true
+
+- name: Restart postgresql
+  service: name=postgresql state=restarted
+  become: true
+
+- name: Install libpq-dev and python-dev
+  apt: name={{ item }} state=latest
+  with_items:
+     - python-dev
+     - libpq-dev
+     - python-psycopg2
+  become: true
+
+- name: Install python-setuptools
+  apt: name=python-setuptools
+  become: true
+
+- name: Install the pips
+  easy_install: name=pip state=latest
+  become: true
+
+- name: Install psycopg2 and libs
+  pip: name={{ item }} state=latest
+  with_items:
+     - psycopg2
+  become: true
+

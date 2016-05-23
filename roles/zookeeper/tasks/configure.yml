@@ -1,0 +1,20 @@
+---
+# file: configure.yml
+- name: Create zookeeper deploy directory
+  file: path=/opt/zookeeper state=directory mode=0777
+        owner={{ ansible_user }}
+  become: true
+
+- name: Download zookeeper version {{ zk_version }}
+  get_url: url=http://www.gtlib.gatech.edu/pub/apache/zookeeper/zookeeper-{{ zk_version }}/zookeeper-{{ zk_version }}.tar.gz
+           dest=/opt/zookeeper
+           checksum=sha256:{{ zk_checksum }}
+
+- name: Un-tar zookeeper download
+  unarchive: src=/opt/zookeeper/zookeeper-{{ zk_version }}.tar.gz dest=/opt/zookeeper/ copy=no
+
+# ZK configurations:
+- name: Copy common.properties for zookeeper node
+  copy: src=zoo.cfg dest=/opt/zookeeper/zookeeper-{{ zk_version }}/conf/zoo.cfg
+        owner={{ ansible_user }} mode=0755
+

@@ -1,0 +1,15 @@
+---
+# file: deploy.yml
+# Deploy Druid-specific configuration, and 
+# start / restart postgres
+- include_vars: pg_pass.yml
+
+- name: Create postgres user for druid
+  postgresql_user: name=druid password={{ druid_metadata_password }} 
+  become_user: postgres
+
+- name: Create druid database
+  postgresql_db: name=druid
+                 owner=druid
+  become_user: postgres
+

@@ -1,0 +1,16 @@
+---
+# Variables for ec2 role
+
+key_name: "<YOUR SSH KEY>"
+security_group: 'YOUR SECURITY GROUP'
+type: "m4.xlarge"
+ami_id: "AMI ID"
+subnet_id: "SUBNET"
+count: 1
+region: "us-west-1"
+tag_name: "druid_default"
+iam_role: "SOME IAM ROLE WITH EC2 ACCESS, S3 ACCESS, AND ROUTE53 ACCESS"
+aws_access_key: ""
+aws_secret_key: ""
+storage: "200"
+

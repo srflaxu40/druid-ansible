@@ -1,0 +1,6 @@
+---
+# file: ec2.yml
+- name: Spin up instance types for druid nodes 
+  hosts: localhost
+  roles:
+    - ec2

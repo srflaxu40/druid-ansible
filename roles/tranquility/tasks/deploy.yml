@@ -1,0 +1,18 @@
+---
+# file: deploy.yml - run to deploy tranquility
+- name: Copy over unit file for tranquility role {{ tag_name }}
+  template: src=druid_tranquility.conf dest=/etc/init/druid_tranquility.conf
+        owner={{ ansible_user }} mode=0644
+  become: true
+
+- name: Start {{ tag_name }} service
+  service: name=druid_tranquility state=restarted
+  become: true
+
+#- name: Start tranquility role
+#  shell: screen -dmS druid-tranquility bin/tranquility server -configFile conf/server.json
+#  args:
+#    chdir: /opt/druid-tranquility/tranquility-distribution-{{ tranq_version }}/
+#    executable: /bin/bash
+#  become: true
+

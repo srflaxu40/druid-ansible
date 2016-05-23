@@ -1,0 +1,11 @@
+---
+# file: tranq.yml
+# note: this is not used by packer. that play is in
+# the packer dir.
+- name: Configure and deploy druid-tranquility node
+  hosts: tag_Name_{{ tag_name }}_{{ tag_environment }}
+  become: yes
+  roles:
+    - hosts
+    - java
+    - tranquility

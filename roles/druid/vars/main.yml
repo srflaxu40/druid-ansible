@@ -1,0 +1,8 @@
+---
+# file: main.yml
+druid_version: "0.9.0"
+druid_role: "overlord"
+druid_checksum: "54262fc1b995efc63b08086ed4996acfb5152f613bcb76ea848fb21679d1ecd9"
+druid_path: "/opt/druid/druid-{{ druid_version }}/"
+zk_host: "druid-zookeeper.your-domain.co"
+pg_host: "druid-postgres.your-domain.co"
