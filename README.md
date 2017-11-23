@@ -156,6 +156,9 @@ packer build \
   * In order to encrypt any file under this repo, use the following command:
 
   `ansible-vault encrypt <file to encrypt> --vault-password-file ~/.ansible-vault-password.txt`
+  
+  * The .vault_pass.txt file is literally just a key=value prior to aes encryption that overrides the `pg_pass` variable
+    in the postgres role.
 
   * To decrypt use:
 
